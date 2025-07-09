@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateTeamMemberInput {
+  email: String!
+  name: String!
+  role: String!
+}
+
+type Mutation {
+  createTeamMember(input: CreateTeamMemberInput!): TeamMember!
+  removeTeamMember(id: String!): Boolean!
+  updateTeamMember(id: String!, input: UpdateTeamMemberInput!): TeamMember!
+}
+
+type Query {
+  teamMember(id: String!): TeamMember!
+  teamMembers: [TeamMember!]!
+}
+
+type TeamMember {
+  email: String!
+  id: ID!
+  name: String!
+  role: String!
+}
+
+input UpdateTeamMemberInput {
+  email: String
+  name: String
+  role: String
+}
