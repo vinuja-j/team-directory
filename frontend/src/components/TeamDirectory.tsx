@@ -1,198 +1,165 @@
-// src/components/TeamDirectory.tsx
-import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Typography,
-  Alert,
-} from '@mui/material';
-import { Edit, Delete, Add } from '@mui/icons-material';
-import {
-  GET_TEAM_MEMBERS,
-  CREATE_TEAM_MEMBER,
-  UPDATE_TEAM_MEMBER,
-  DELETE_TEAM_MEMBER,
-  TeamMember,
-  CreateTeamMemberInput,
-  UpdateTeamMemberInput,
-} from '../graphql/queries';
+import { useState } from 'react';
+import { TeamDirectoryHeader } from './TeamDirectoryHeader';
+import { TeamMemberTable } from './TeamMemberTable';
+import { TeamMemberModal } from './TeamMemberModal';
+import { DeleteConfirmationModal } from './DeleteConfirmationModal.tsx';
+import { type TeamMember } from '@/types/TeamMember';
 
-const TeamDirectory: React.FC = () => {
-  const [open, setOpen] = useState(false);
+// Sample data without start date
+const initialTeamMembers: TeamMember[] = [
+  {
+    id: '1',
+    name: 'Maya Fernandez',
+    email: 'maya.fernandez@gmail.com',
+    role: 'Software Engineer',
+    employmentType: 'Full-time'
+  },
+  {
+    id: '2',
+    name: 'Sara Fernandez',
+    email: 'sara.fernandez@gmail.com',
+    role: 'UI/UX Designer',
+    employmentType: 'Full-time'
+  },
+  {
+    id: '3',
+    name: 'Yunal Fernandez',
+    email: 'yunal.fernandez@gmail.com',
+    role: 'QA Engineer',
+    employmentType: 'Part-time'
+  },
+  {
+    id: '4',
+    name: 'Dinil Fernandez',
+    email: 'dinil.fernandez@gmail.com',
+    role: 'Product Manager',
+    employmentType: 'Intern'
+  },
+  {
+    id: '5',
+    name: 'Maya Fernandez',
+    email: 'maya.fernandez@gmail.com',
+    role: 'Full Stack Developer',
+    employmentType: 'Part-time'
+  },
+  {
+    id: '6',
+    name: 'Maya Fernandez',
+    email: 'maya.fernandez@gmail.com',
+    role: 'Software Engineer',
+    employmentType: 'Full-time'
+  },
+  {
+    id: '7',
+    name: 'Maya Fernandez',
+    email: 'maya.fernandez@gmail.com',
+    role: 'Software Engineer',
+    employmentType: 'Intern'
+  },
+  {
+    id: '8',
+    name: 'Maya Fernandez',
+    email: 'maya.fernandez@gmail.com',
+    role: 'Software Engineer',
+    employmentType: 'Part-time'
+  },
+  {
+    id: '9',
+    name: 'Maya Fernandez',
+    email: 'maya.fernandez@gmail.com',
+    role: 'Software Engineer',
+    employmentType: 'Full-time'
+  }
+];
+
+/**
+ * Main container component for the Team Directory page.
+ * It manages the state of team members and handles adding, editing, and deleting members.
+ */
+export const TeamDirectory = () => {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(initialTeamMembers);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
-  const [formData, setFormData] = useState<CreateTeamMemberInput>({
-    name: '',
-    email: '',
-    role: '',
-  });
+  const [deletingMember, setDeletingMember] = useState<TeamMember | null>(null);
 
-  // GraphQL hooks
-  const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
-  const [createTeamMember] = useMutation(CREATE_TEAM_MEMBER, {
-    refetchQueries: [{ query: GET_TEAM_MEMBERS }],
-  });
-  const [updateTeamMember] = useMutation(UPDATE_TEAM_MEMBER, {
-    refetchQueries: [{ query: GET_TEAM_MEMBERS }],
-  });
-  const [deleteTeamMember] = useMutation(DELETE_TEAM_MEMBER, {
-    refetchQueries: [{ query: GET_TEAM_MEMBERS }],
-  });
+  const handleAddMember = (memberData: Omit<TeamMember, 'id'>) => {
+    const newMember: TeamMember = {
+      ...memberData,
+      id: (teamMembers.length + 1).toString()
+    };
+    setTeamMembers(prev => [...prev, newMember]);
+  };
 
-  const handleOpen = (member?: TeamMember) => {
-    if (member) {
-      setEditingMember(member);
-      setFormData({ name: member.name, email: member.email, role: member.role });
-    } else {
+  const handleEditMember = (memberData: Omit<TeamMember, 'id'>) => {
+    if (editingMember) {
+      setTeamMembers(prev => 
+        prev.map(member => 
+          member.id === editingMember.id 
+            ? { ...memberData, id: editingMember.id }
+            : member
+        )
+      );
       setEditingMember(null);
-      setFormData({ name: '', email: '', role: '' });
-    }
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setEditingMember(null);
-    setFormData({ name: '', email: '', role: '' });
-  };
-
-  const handleSubmit = async () => {
-    try {
-      if (editingMember) {
-        await updateTeamMember({
-          variables: {
-            id: editingMember.id,
-            input: formData,
-          },
-        });
-      } else {
-        await createTeamMember({
-          variables: {
-            input: formData,
-          },
-        });
-      }
-      handleClose();
-    } catch (err) {
-      console.error('Error saving team member:', err);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this team member?')) {
-      try {
-        await deleteTeamMember({
-          variables: { id },
-        });
-      } catch (err) {
-        console.error('Error deleting team member:', err);
-      }
+  const handleDeleteMember = () => {
+    if (deletingMember) {
+      setTeamMembers(prev => prev.filter(member => member.id !== deletingMember.id));
+      setDeletingMember(null);
+      setIsDeleteModalOpen(false);
     }
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
+  const openEditModal = (member: TeamMember) => {
+    setEditingMember(member);
+    setIsEditModalOpen(true);
+  };
+
+  const openDeleteModal = (member: TeamMember) => {
+    setDeletingMember(member);
+    setIsDeleteModalOpen(true);
+  };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4">Team Directory</Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => handleOpen()}
-        >
-          Add Team Member
-        </Button>
-      </Box>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data?.teamMembers?.map((member: TeamMember) => (
-              <TableRow key={member.id}>
-                <TableCell>{member.name}</TableCell>
-                <TableCell>{member.email}</TableCell>
-                <TableCell>{member.role}</TableCell>
-                <TableCell align="right">
-                  <IconButton onClick={() => handleOpen(member)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(member.id)}>
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Add/Edit Dialog */}
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {editingMember ? 'Edit Team Member' : 'Add New Team Member'}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Name"
-            fullWidth
-            variant="outlined"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            margin="dense"
-            label="Email"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            margin="dense"
-            label="Role"
-            fullWidth
-            variant="outlined"
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained">
-            {editingMember ? 'Update' : 'Create'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <TeamDirectoryHeader onAddMember={() => setIsAddModalOpen(true)} />
+        <TeamMemberTable 
+          members={teamMembers}
+          onEditMember={openEditModal}
+          onDeleteMember={openDeleteModal}
+        />
+        
+        <TeamMemberModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onSave={handleAddMember}
+          mode="add"
+        />
+        
+        <TeamMemberModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditingMember(null);
+          }}
+          onSave={handleEditMember}
+          editingMember={editingMember}
+          mode="edit"
+        />
+        
+        <DeleteConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+            setDeletingMember(null);
+          }}
+          onConfirm={handleDeleteMember}
+        />
+      </div>
+    </div>
   );
 };
-
-export default TeamDirectory;
