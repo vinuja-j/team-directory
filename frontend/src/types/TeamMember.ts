@@ -6,6 +6,11 @@ export interface TeamMember {
     employmentType: 'Full-time' | 'Part-time' | 'Intern';
 }
 
+/**
+ * Returns the CSS classes for the badge based on the employment type.
+ * @param type - The employment type of the team member.
+ * @returns CSS classes for the badge.
+ */
 export const getEmploymentTypeColor = (type: TeamMember['employmentType']) => {
   switch (type) {
     case 'Full-time':

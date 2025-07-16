@@ -12,6 +12,12 @@ type SortField = keyof TeamMember;
 type SortDirection = 'asc' | 'desc';
 
 
+/**
+ * Table component to display team members with sorting and action buttons.
+ * @param members - Array of team members to display.
+ * @param onEditMember - Callback function to handle editing a team member.
+ * @param onDeleteMember - Callback function to handle deleting a team member.
+ */
 export const TeamMemberTable = ({ members, onEditMember, onDeleteMember }: TeamMemberTableProps) => {
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');

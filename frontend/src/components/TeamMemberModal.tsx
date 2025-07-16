@@ -28,6 +28,14 @@ const employmentTypeOptions = [
   'Intern'
 ] as const;
 
+/**
+ * Modal component for adding or editing a team member.
+ * @param isOpen - Controls the visibility of the modal.
+ * @param onClose - Callback function to close the modal.
+ * @param onSave - Callback function to save the team member data.
+ * @param editingMember - Optional team member data to pre-fill the form for editing.
+ * @param mode - Determines if the modal is in 'add' or 'edit' mode.
+ */
 export const TeamMemberModal = ({ isOpen, onClose, onSave, editingMember, mode }: TeamMemberModalProps) => {
   const [formData, setFormData] = useState({
     name: '',

@@ -6,6 +6,12 @@ interface DeleteConfirmationModalProps {
   onConfirm: () => void;
 }
 
+/**
+ * Modal component to confirm deletion of a team member.
+ * @param isOpen - Controls the visibility of the modal.
+ * @param onClose - Callback function to close the modal.
+ * @param onConfirm - Callback function to confirm deletion.
+ */
 export const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }: DeleteConfirmationModalProps) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
