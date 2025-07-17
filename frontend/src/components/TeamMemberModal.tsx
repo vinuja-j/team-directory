@@ -72,7 +72,7 @@ export const TeamMemberModal = ({ isOpen, onClose, onSave, editingMember, mode }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {mode === 'add' ? 'Add Team Member' : 'Edit Team Member'}
@@ -104,7 +104,7 @@ export const TeamMemberModal = ({ isOpen, onClose, onSave, editingMember, mode }
             <Label htmlFor="role">Job Title</Label>
             <Select
               value={formData.role}
-              onValueChange={(value) => setFormData(prev => ({ ...prev, jobTitle: value }))}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, role: value }))}
               required
             >
               <SelectTrigger>
