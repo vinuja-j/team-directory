@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { TeamMember, CreateTeamMemberInput, UpdateTeamMemberInput } from './team-member.model';
+import { TeamMember, CreateTeamMemberInput, UpdateTeamMemberInput, EmploymentType } from './team-member.model';
 
 @Injectable()
 export class TeamMemberService {
   // In-memory storage for team members 
   private teamMembers: TeamMember[] = [
-    { id: '1', name: 'Rafel Nate', email: 'rafel@gmail.com', role: 'Developer' },
-    { id: '2', name: 'Jimmy Smith', email: 'jimmy@gmail.com', role: 'Designer' },
+    { id: '1', name: 'Rafel Nate', email: 'rafel@gmail.com', role: 'Developer', employmentType: EmploymentType.FullTime },
+    { id: '2', name: 'Jimmy Smith', email: 'jimmy@gmail.com', role: 'Designer', employmentType: EmploymentType.PartTime },
   ];
 
   private nextId = 3;

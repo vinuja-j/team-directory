@@ -1,4 +1,14 @@
-import { ObjectType, Field, ID, InputType } from '@nestjs/graphql';
+import { ObjectType, Field, ID, InputType, registerEnumType } from '@nestjs/graphql';
+
+export enum EmploymentType {
+  FullTime = 'Full-time',
+  PartTime = 'Part-time',
+  Intern = 'Intern',
+}
+
+registerEnumType(EmploymentType, {
+  name: 'EmploymentType',
+});
 
 @ObjectType()
 export class TeamMember {
@@ -13,6 +23,9 @@ export class TeamMember {
 
   @Field()
   role: string;
+
+  @Field(() => EmploymentType)
+  employmentType: EmploymentType;
 }
 
 @InputType()
@@ -25,6 +38,9 @@ export class CreateTeamMemberInput {
 
   @Field()
   role: string;
+
+  @Field(() => EmploymentType)
+  employmentType: EmploymentType;
 }
 
 @InputType()
@@ -37,4 +53,7 @@ export class UpdateTeamMemberInput {
 
   @Field({ nullable: true })
   role?: string;
+
+  @Field(() => EmploymentType, { nullable: true })
+  employmentType?: EmploymentType;
 } 

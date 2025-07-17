@@ -4,8 +4,15 @@
 
 input CreateTeamMemberInput {
   email: String!
+  employmentType: EmploymentType!
   name: String!
   role: String!
+}
+
+enum EmploymentType {
+  FullTime
+  Intern
+  PartTime
 }
 
 type Mutation {
@@ -21,6 +28,7 @@ type Query {
 
 type TeamMember {
   email: String!
+  employmentType: EmploymentType!
   id: ID!
   name: String!
   role: String!
@@ -28,6 +36,7 @@ type TeamMember {
 
 input UpdateTeamMemberInput {
   email: String
+  employmentType: EmploymentType
   name: String
   role: String
 }
