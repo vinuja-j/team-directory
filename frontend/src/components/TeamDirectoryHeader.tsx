@@ -3,14 +3,16 @@ import { Button } from '@/components/ui/button';
 
 interface TeamDirectoryHeaderProps {
   onAddMember: () => void;
+  onImportCSV: () => void;
 }
 /**
  * Header section for the Team Directory page.
  * Displays the title, description, and action buttons for importing CSV and adding team members.
  * @param { onAddMember } - Callback function to handle adding a new team member.
+ * @param { onImportCSV } - Callback function to handle importing CSV.
  */
 
-export const TeamDirectoryHeader = ({ onAddMember }: TeamDirectoryHeaderProps) => {
+export const TeamDirectoryHeader = ({ onAddMember, onImportCSV }: TeamDirectoryHeaderProps) => {
   return (
     <div className="mb-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -22,6 +24,7 @@ export const TeamDirectoryHeader = ({ onAddMember }: TeamDirectoryHeaderProps) =
           <Button
             variant="outline"
             className="flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:text-accent-foreground h-10 px-4 py-2 hover:bg-gray-50 transition-colors"
+            onClick={onImportCSV}
           >
             <Upload className="h-4 w-4" />
             Import CSV
