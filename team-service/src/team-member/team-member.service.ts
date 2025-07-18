@@ -32,6 +32,11 @@ export class TeamMemberService {
     return newMember;
   }
 
+  //Bulk add team members
+  bulkCreate(inputs: CreateTeamMemberInput[]): TeamMember[] {
+    return inputs.map(input => this.create(input));
+  }
+
   //Update existing team member
   update(id: string, input: UpdateTeamMemberInput): TeamMember {
     const memberIndex = this.teamMembers.findIndex(member => member.id === id);

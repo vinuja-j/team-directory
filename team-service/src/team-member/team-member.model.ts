@@ -56,4 +56,10 @@ export class UpdateTeamMemberInput {
 
   @Field(() => EmploymentType, { nullable: true })
   employmentType?: EmploymentType;
+}
+
+@InputType()
+export class CreateBulkTeamMemberInput {
+  @Field(() => [CreateTeamMemberInput])
+  inputs: CreateTeamMemberInput[];
 } 

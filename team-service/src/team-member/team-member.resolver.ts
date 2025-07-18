@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { TeamMemberService } from './team-member.service';
-import { TeamMember, CreateTeamMemberInput, UpdateTeamMemberInput } from './team-member.model';
+import { TeamMember, CreateTeamMemberInput, UpdateTeamMemberInput, CreateBulkTeamMemberInput } from './team-member.model';
 
 @Resolver(() => TeamMember)
 export class TeamMemberResolver {
@@ -39,5 +39,11 @@ export class TeamMemberResolver {
   @Mutation(() => Boolean)
   removeTeamMember(@Args('id') id: string) {
     return this.teamMemberService.remove(id);
+  }
+
+  // BULK CREATE - Add multiple team members
+  @Mutation(() => [TeamMember])
+  createBulkTeamMembers(@Args('input') input: CreateBulkTeamMemberInput) {
+    return this.teamMemberService.bulkCreate(input.inputs);
   }
 }

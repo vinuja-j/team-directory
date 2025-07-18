@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateBulkTeamMemberInput {
+  inputs: [CreateTeamMemberInput!]!
+}
+
 input CreateTeamMemberInput {
   email: String!
   employmentType: EmploymentType!
@@ -16,6 +20,7 @@ enum EmploymentType {
 }
 
 type Mutation {
+  createBulkTeamMembers(input: CreateBulkTeamMemberInput!): [TeamMember!]!
   createTeamMember(input: CreateTeamMemberInput!): TeamMember!
   removeTeamMember(id: String!): Boolean!
   updateTeamMember(id: String!, input: UpdateTeamMemberInput!): TeamMember!
