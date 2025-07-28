@@ -1,65 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { TeamMember, CreateTeamMemberInput, UpdateTeamMemberInput, EmploymentType } from './team-member.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TeamMember, CreateTeamMemberInput, UpdateTeamMemberInput } from './team-member.model';
 
 @Injectable()
 export class TeamMemberService {
-  // In-memory storage for team members 
-  private teamMembers: TeamMember[] = [
-    { id: '1', name: 'Rafel Nate', email: 'rafel@gmail.com', role: 'Developer', employmentType: EmploymentType.FullTime },
-    { id: '2', name: 'Jimmy Smith', email: 'jimmy@gmail.com', role: 'Designer', employmentType: EmploymentType.PartTime },
-  ];
+  constructor(
+    @InjectRepository(TeamMember)
+    private teamMemberRepository: Repository<TeamMember>,
+  ) {}
 
-  private nextId = 3;
-
-  //Get all team members
-  findAll(): TeamMember[] {
-    return this.teamMembers;
+  // Get all team members
+  findAll(): Promise<TeamMember[]> {
+    return this.teamMemberRepository.find();
   }
 
-  //Get one team member by ID
-  findOne(id: string): TeamMember {
-    return this.teamMembers.find(member => member.id === id);
+  // Get one team member by ID
+  findOne(id: number): Promise<TeamMember | null> {
+    return this.teamMemberRepository.findOneBy({ id });
   }
 
-  //Add new team member
-  create(input: CreateTeamMemberInput): TeamMember {
-    const newMember: TeamMember = {
-      id: this.nextId.toString(),
-      ...input,
-    };
-    this.nextId++;
-    this.teamMembers.push(newMember);
-    return newMember;
+  // Add new team member
+  create(input: CreateTeamMemberInput): Promise<TeamMember> {
+    const member = this.teamMemberRepository.create(input);
+    return this.teamMemberRepository.save(member);
   }
 
-  //Bulk add team members
-  bulkCreate(inputs: CreateTeamMemberInput[]): TeamMember[] {
-    return inputs.map(input => this.create(input));
+  // Bulk add team members
+  bulkCreate(inputs: CreateTeamMemberInput[]): Promise<TeamMember[]> {
+    const members = this.teamMemberRepository.create(inputs);
+    return this.teamMemberRepository.save(members);
   }
 
-  //Update existing team member
-  update(id: string, input: UpdateTeamMemberInput): TeamMember {
-    const memberIndex = this.teamMembers.findIndex(member => member.id === id);
-    if (memberIndex === -1) {
-      throw new Error('Team member not found');
-    }
-
-    this.teamMembers[memberIndex] = {
-      ...this.teamMembers[memberIndex],
-      ...input,
-    };
-
-    return this.teamMembers[memberIndex];
+  // Update existing team member
+  async update(id: number, input: UpdateTeamMemberInput): Promise<TeamMember> {
+    await this.teamMemberRepository.update(id, input);
+    return this.teamMemberRepository.findOneBy({ id });
   }
 
-  //Remove team member
-  remove(id: string): boolean {
-    const memberIndex = this.teamMembers.findIndex(member => member.id === id);
-    if (memberIndex === -1) {
-      return false;
-    }
-
-    this.teamMembers.splice(memberIndex, 1);
-    return true;
+  // Remove team member
+  async remove(id: number): Promise<boolean> {
+    const result = await this.teamMemberRepository.delete(id);
+    return result.affected > 0;
   }
 } 
