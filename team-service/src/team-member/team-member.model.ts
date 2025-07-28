@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID, InputType, registerEnumType } from '@nestjs/graphql';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum EmploymentType {
   FullTime = 'Full-time',
@@ -11,20 +12,26 @@ registerEnumType(EmploymentType, {
 });
 
 @ObjectType()
+@Entity()
 export class TeamMember {
   @Field(() => ID)
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Field()
+  @Column()
   name: string;
 
   @Field()
+  @Column()
   email: string;
 
   @Field()
+  @Column()
   role: string;
 
   @Field(() => EmploymentType)
+  @Column({ type: 'enum', enum: EmploymentType })
   employmentType: EmploymentType;
 }
 

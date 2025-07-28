@@ -17,7 +17,7 @@ export class TeamMemberResolver {
   // READ - Get one team member
   @Query(() => TeamMember, { name: 'teamMember' })
   findOne(@Args('id') id: string) {
-    return this.teamMemberService.findOne(id);
+    return this.teamMemberService.findOne(Number(id));
   }
 
   // CREATE - Add new team member
@@ -32,16 +32,16 @@ export class TeamMemberResolver {
     @Args('id') id: string,
     @Args('input') input: UpdateTeamMemberInput,
   ) {
-    return this.teamMemberService.update(id, input);
+    return this.teamMemberService.update(Number(id), input);
   }
 
   // DELETE - Remove team member
   @Mutation(() => Boolean)
   removeTeamMember(@Args('id') id: string) {
-    return this.teamMemberService.remove(id);
+    return this.teamMemberService.remove(Number(id));
   }
 
-  // BULK CREATE - Add multiple team members
+  // CREATE BULK - Add multiple team members
   @Mutation(() => [TeamMember])
   createBulkTeamMembers(@Args('input') input: CreateBulkTeamMemberInput) {
     return this.teamMemberService.bulkCreate(input.inputs);
