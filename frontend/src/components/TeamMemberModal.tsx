@@ -23,8 +23,8 @@ const jobTitleOptions = [
 ];
 
 const employmentTypeOptions = [
-  'Full-time',
-  'Part-time',
+  'FullTime',
+  'PartTime',
   'Intern'
 ] as const;
 
@@ -41,7 +41,7 @@ export const TeamMemberModal = ({ isOpen, onClose, onSave, editingMember, mode }
     name: '',
     email: '',
     role: '',
-    employmentType: 'Full-time' as TeamMember['employmentType']
+    employmentType: 'FullTime' as TeamMember['employmentType']
   });
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const TeamMemberModal = ({ isOpen, onClose, onSave, editingMember, mode }
         name: '',
         email: '',
         role: '',
-        employmentType: 'Full-time'
+        employmentType: 'FullTime'
       });
     }
   }, [editingMember, mode, isOpen]);

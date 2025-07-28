@@ -37,9 +37,11 @@ export const TeamDirectory = () => {
   // These handlers are now only for modal state, not for updating the table directly
   const handleAddMember = async (memberData: Omit<TeamMember, 'id'>) => {
     try {
+      console.log('Adding member:', memberData);
       await createTeamMember({ variables: { input: memberData } });
       setIsAddModalOpen(false);
     } catch (err) {
+      console.error('Error adding member:', err);
       // Optionally handle error
       setIsAddModalOpen(false);
     }
@@ -53,7 +55,7 @@ export const TeamDirectory = () => {
         setEditingMember(null);
       } catch (err) {
         setIsEditModalOpen(false);
-        setEditingMember(null);
+      setEditingMember(null);
       }
     }
   };
@@ -89,11 +91,11 @@ export const TeamDirectory = () => {
         ) : error ? (
           <div className="text-center py-8 text-red-500">Error loading team members.</div>
         ) : (
-          <TeamMemberTable 
+        <TeamMemberTable 
             members={data?.teamMembers || []}
-            onEditMember={openEditModal}
-            onDeleteMember={openDeleteModal}
-          />
+          onEditMember={openEditModal}
+          onDeleteMember={openDeleteModal}
+        />
         )}
         <TeamMemberModal
           isOpen={isAddModalOpen}

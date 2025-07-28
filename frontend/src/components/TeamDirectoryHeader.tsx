@@ -5,13 +5,13 @@ interface TeamDirectoryHeaderProps {
   onAddMember: () => void;
   onImportCSV: () => void;
 }
+
 /**
  * Header section for the Team Directory page.
  * Displays the title, description, and action buttons for importing CSV and adding team members.
  * @param { onAddMember } - Callback function to handle adding a new team member.
  * @param { onImportCSV } - Callback function to handle importing CSV.
  */
-
 export const TeamDirectoryHeader = ({ onAddMember, onImportCSV }: TeamDirectoryHeaderProps) => {
   return (
     <div className="mb-8">

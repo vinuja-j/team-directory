@@ -12,7 +12,7 @@ interface CSVRow {
   name: string;
   email: string;
   role: string;
-  employmentType: string;
+  employmentType: 'FullTime' | 'PartTime' | 'Intern';
 }
 
 // Props for the CSVUpload modal
@@ -58,11 +58,17 @@ const CSVUpload: React.FC<CSVUploadProps> = ({ open, onClose }) => {
             if (row.length < 4) {
               throw new Error(`Row ${index + 2} is missing required fields (name, email, role, employmentType)`);
             }
+            
+            const employmentType = row[3]?.trim();
+            if (!['FullTime', 'PartTime', 'Intern'].includes(employmentType)) {
+              throw new Error(`Row ${index + 2} has invalid employmentType: "${employmentType}". Must be "FullTime", "PartTime", or "Intern"`);
+            }
+            
             return {
               name: row[0]?.trim() || '',
               email: row[1]?.trim() || '',
               role: row[2]?.trim() || '',
-              employmentType: row[3]?.trim() || '',
+              employmentType: employmentType as 'FullTime' | 'PartTime' | 'Intern',
             };
           });
           // Validate required fields
@@ -89,6 +95,7 @@ const CSVUpload: React.FC<CSVUploadProps> = ({ open, onClose }) => {
     if (csvData.length === 0) return;
     setLoading(true);
     try {
+      console.log('Uploading CSV data:', csvData);
       await createBulkTeamMembers({
         variables: { input: { inputs: csvData } },
       });
@@ -98,6 +105,7 @@ const CSVUpload: React.FC<CSVUploadProps> = ({ open, onClose }) => {
       setError("");
       onClose();
     } catch (err) {
+      console.error('Error uploading CSV:', err);
       setError(err instanceof Error ? err.message : 'Error uploading team members');
     } finally {
       setLoading(false);
@@ -132,6 +140,9 @@ const CSVUpload: React.FC<CSVUploadProps> = ({ open, onClose }) => {
             <span className="bg-primary text-primary-foreground rounded px-2 py-1 text-xs">role</span>
             <span className="bg-primary text-primary-foreground rounded px-2 py-1 text-xs">employmentType</span>
           </div>
+          <p className="text-xs text-muted-foreground">
+            employmentType must be: "FullTime", "PartTime", or "Intern"
+          </p>
         </div>
         {/* File input */}
         <Input
