@@ -62,7 +62,7 @@ export const CREATE_BULK_TEAM_MEMBERS = gql`
       role
       employmentType
     }
-  }
+    }
 `;
 
 //TypeScript interfaces for the queries and mutations
@@ -71,16 +71,23 @@ export interface TeamMember {
     name: string;
     email: string;
     role: string;
+    employmentType: 'FullTime' | 'PartTime' | 'Intern';
 }
 
 export interface CreateTeamMemberInput {
     name: string;
     email: string;
     role: string;
+    employmentType: 'FullTime' | 'PartTime' | 'Intern';
 }
 
 export interface UpdateTeamMemberInput {
     name?: string;
     email?: string;
     role?: string;
+    employmentType?: 'FullTime' | 'PartTime' | 'Intern';
+}
+
+export interface CreateBulkTeamMemberInput {
+    inputs: CreateTeamMemberInput[];
 }
