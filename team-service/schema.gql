@@ -20,7 +20,7 @@ enum EmploymentType {
 }
 
 type Mutation {
-  createBulkTeamMembers(input: CreateBulkTeamMemberInput!): [TeamMember!]!
+  createBulkTeamMembers(input: CreateBulkTeamMemberInput!): Boolean!
   createTeamMember(input: CreateTeamMemberInput!): TeamMember!
   removeTeamMember(id: String!): Boolean!
   updateTeamMember(id: String!, input: UpdateTeamMemberInput!): TeamMember!

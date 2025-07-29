@@ -42,8 +42,9 @@ export class TeamMemberResolver {
   }
 
   // CREATE BULK - Add multiple team members
-  @Mutation(() => [TeamMember])
-  createBulkTeamMembers(@Args('input') input: CreateBulkTeamMemberInput) {
-    return this.teamMemberService.bulkCreate(input.inputs);
+  @Mutation(() => Boolean)
+  async createBulkTeamMembers(@Args('input') input: CreateBulkTeamMemberInput) {
+    await this.teamMemberService.enqueueBulkImport(input.inputs);
+    return true;
   }
 }

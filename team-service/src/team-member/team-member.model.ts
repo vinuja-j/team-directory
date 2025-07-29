@@ -2,8 +2,8 @@ import { ObjectType, Field, ID, InputType, registerEnumType } from '@nestjs/grap
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum EmploymentType {
-  FullTime = 'Full-time',
-  PartTime = 'Part-time',
+  FullTime = 'FullTime',
+  PartTime = 'PartTime',
   Intern = 'Intern',
 }
 
