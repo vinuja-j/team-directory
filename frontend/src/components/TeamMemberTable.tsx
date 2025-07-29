@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ChevronUp, ChevronDown, Edit, Trash2 } from 'lucide-react';
-import { type TeamMember} from '@/types/TeamMember';
+import { type TeamMember, getEmploymentTypeColor } from '@/types/TeamMember';
 
 interface TeamMemberTableProps {
   members: TeamMember[];
@@ -10,7 +10,6 @@ interface TeamMemberTableProps {
 
 type SortField = keyof TeamMember;
 type SortDirection = 'asc' | 'desc';
-
 
 /**
  * Table component to display team members with sorting and action buttons.
@@ -48,19 +47,6 @@ export const TeamMemberTable = ({ members, onEditMember, onDeleteMember }: TeamM
       <ChevronUp className="h-4 w-4 text-gray-500" />;
   };
 
-  const getBadgeClass = (type: TeamMember['employmentType']) => {
-    switch (type) {
-      case 'Full-time':
-        return 'bg-green-100 text-green-700';
-      case 'Part-time':
-        return 'bg-blue-100 text-blue-700';
-      case 'Intern':
-        return 'bg-orange-100 text-orange-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
-  };
-
   return (
     <div className="bg-white rounded-lg shadow overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
@@ -88,7 +74,7 @@ export const TeamMemberTable = ({ members, onEditMember, onDeleteMember }: TeamM
               <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{member.email}</td>
               <td className="px-6 py-4 text-gray-900 whitespace-nowrap">{member.role}</td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getBadgeClass(member.employmentType)}`}>{member.employmentType}</span>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getEmploymentTypeColor(member.employmentType)}`}>{member.employmentType}</span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center space-x-2">

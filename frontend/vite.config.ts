@@ -17,6 +17,5 @@ export default defineConfig({
       '@lib': path.resolve(__dirname, './src/lib'),
       '@types': path.resolve(__dirname, './src/types'),
     },
-    dedupe: ['@emotion/react'],
   }
 })

@@ -95,7 +95,6 @@ const CSVUpload: React.FC<CSVUploadProps> = ({ open, onClose }) => {
     if (csvData.length === 0) return;
     setLoading(true);
     try {
-      console.log('Uploading CSV data:', csvData);
       await createBulkTeamMembers({
         variables: { input: { inputs: csvData } },
       });
@@ -105,7 +104,6 @@ const CSVUpload: React.FC<CSVUploadProps> = ({ open, onClose }) => {
       setError("");
       onClose();
     } catch (err) {
-      console.error('Error uploading CSV:', err);
       setError(err instanceof Error ? err.message : 'Error uploading team members');
     } finally {
       setLoading(false);
