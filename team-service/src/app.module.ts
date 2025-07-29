@@ -5,6 +5,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TeamMemberModule } from './team-member/team-member.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BullModule } from '@nestjs/bull';
+import { TeamMember } from './team-member/team-member.model';
 
 @Module({
   imports: [
@@ -15,17 +17,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username:'root',
       password:'teamdata',
       database:'teamdirectory',
+      entities: [TeamMember],
       autoLoadEntities: true,
       synchronize:true,
     }),
-    //Just GraphQL module for now
+    
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql', 
-      sortSchema: true, // Sort schema types
-      playground: true, // Enable GraphQL Playground
+      sortSchema: true, 
+      playground: true, 
     }),
-    TeamMemberModule, // Import the TeamMemberModule
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    TeamMemberModule, 
   ],
   controllers: [AppController],
   providers: [AppService],
