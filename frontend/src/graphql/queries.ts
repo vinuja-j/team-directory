@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const  GET_TEAM_MEMBERS = gql`
+export const GET_TEAM_MEMBERS = gql`
     query GetTeamMembers {
         teamMembers {
         id
@@ -11,6 +11,7 @@ export const  GET_TEAM_MEMBERS = gql`
         }
     }
 `;
+
 export const GET_TEAM_MEMBER = gql`
     query GetTeamMember($id: String!) {
         teamMember(id: $id) {
@@ -54,14 +55,8 @@ export const REMOVE_TEAM_MEMBER = gql`
 `;
 
 export const CREATE_BULK_TEAM_MEMBERS = gql`
-  mutation CreateBulkTeamMembers($input: CreateBulkTeamMemberInput!) {
-    createBulkTeamMembers(input: $input) {
-      id
-      name
-      email
-      role
-      employmentType
-    }
+    mutation CreateBulkTeamMembers($input: CreateBulkTeamMemberInput!) {
+        createBulkTeamMembers(input: $input)
     }
 `;
 
