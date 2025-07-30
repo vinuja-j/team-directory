@@ -40,7 +40,7 @@ export class TeamMemberService {
   async remove(id: number): Promise<boolean> {
     const result = await this.teamMemberRepository.delete(id);
     return result.affected > 0;
-  }
+    }
 
   async enqueueBulkImport(inputs: CreateTeamMemberInput[]) {
     await this.bulkTeamMemberQueue.add('import', { inputs });

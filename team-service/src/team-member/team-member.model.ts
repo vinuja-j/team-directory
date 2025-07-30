@@ -15,7 +15,7 @@ registerEnumType(EmploymentType, {
 @Entity()
 export class TeamMember {
   @Field(() => ID)
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Field()
@@ -31,7 +31,10 @@ export class TeamMember {
   role: string;
 
   @Field(() => EmploymentType)
-  @Column({ type: 'enum', enum: EmploymentType })
+  @Column({
+    type: 'enum',
+    enum: EmploymentType,
+  })
   employmentType: EmploymentType;
 }
 
